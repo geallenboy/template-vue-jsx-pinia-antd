@@ -9,18 +9,33 @@ import { resolve } from 'path';
 import { viteMockServe } from 'vite-plugin-mock';
 import styleImport from 'vite-plugin-style-import';
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons';
+import pkg from './package.json';
+import dayjs from 'dayjs';
 const CWD = process.cwd();
+['dependencies', 'devDependencies'].forEach((name) => {
+  Object.keys(pkg[name]).forEach((key) => {
+    const devPkg = require(`./node_modules/${key}/package.json`);
+    pkg[name][key] = {
+      url: devPkg.repository?.url || devPkg.repository || devPkg.homepage,
+      version: pkg[name][key],
+    };
+  });
+});
 
+const __APP_INFO__ = {
+  pkg,
+  lastBuildTime: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+};
 export default ({ command, mode }: ConfigEnv): UserConfig => {
   // 环境变量
   const { VITE_BASE_URL, VITE_DROP_CONSOLE } = loadEnv(mode, CWD);
-
+  console.log(VITE_BASE_URL, VITE_DROP_CONSOLE);
   const isBuild = command === 'build';
 
   return {
     base: VITE_BASE_URL,
     esbuild: {
-      target: 'es2015',
+      // target: 'es2015',
     },
     resolve: {
       alias: {
@@ -45,7 +60,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       }),
       createSvgIconsPlugin({
         // Specify the icon folder to be cached
-        iconDirs: [resolve(CWD, 'src/assets/icons')],
+        iconDirs: [resolve(CWD, 'src/assets/images/icons')],
         // Specify symbolId format
         symbolId: 'svg-icon-[dir]-[name]',
       }),
@@ -77,8 +92,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
       preprocessorOptions: {
         less: {
           javascriptEnabled: true,
-          modifyVars: {},
-          // additionalData: `@import "@/styles/variables.less";`,
+          modifyVars: { '@primary-color': '#13c2c2' },
         },
       },
     },
@@ -94,9 +108,7 @@ export default ({ command, mode }: ConfigEnv): UserConfig => {
         },
       },
     },
-    optimizeDeps: {
-      include: ['ant-design-vue/es/locale/zh_CN'],
-    },
+
     build: {
       // target: 'esnext',
       terserOptions: {
