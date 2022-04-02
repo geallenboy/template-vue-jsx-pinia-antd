@@ -5,9 +5,9 @@ export default defineComponent({
   name: 'Footer',
   render() {
     return (
-      <Footer>
-        <p>Copyright ©2022 garron Admin</p>
+      <Footer class={'text-center'}>
+        <p>Copyright ©2022 garron </p>
       </Footer>
     );
-  },
+  }
 });

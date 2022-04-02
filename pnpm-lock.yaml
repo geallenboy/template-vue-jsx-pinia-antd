@@ -5,6 +5,7 @@ specifiers:
   '@antv/g2plot': ^2.4.13
   '@commitlint/cli': ^16.2.1
   '@commitlint/config-conventional': ^16.2.1
+  '@garron/standard': ^1.4.0
   '@types/lodash': ^4.14.180
   '@types/node': ^17.0.18
   '@types/webpack-env': ^1.16.3
@@ -74,6 +75,7 @@ dependencies:
 devDependencies:
   '@commitlint/cli': 16.2.3
   '@commitlint/config-conventional': 16.2.1
+  '@garron/standard': 1.4.1
   '@types/lodash': 4.14.180
   '@types/node': 17.0.23
   '@types/webpack-env': 1.16.3
@@ -813,6 +815,10 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@garron/standard/1.4.1:
+    resolution: {integrity: sha512-NNrHMGtJQDYwn3u1DD3zi7PvjitbMeDOYWPFbpuudaB6JmUkWFnX1oOUOkdVxlNJ88sTqoduPNFnEz85HaoXHw==}
     dev: true
 
   /@humanwhocodes/config-array/0.9.5:

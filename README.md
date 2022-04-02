@@ -25,7 +25,7 @@
 
 ```sh
 
-git clone git@github.com:geallenboy/template-vue3-jsx-antd-pinia.git
+git clone git@github.com:geallenboy/template-vue3-jsx-pinia-antd.git
 
 ```
 
