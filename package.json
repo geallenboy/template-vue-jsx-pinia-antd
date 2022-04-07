@@ -1,6 +1,7 @@
 {
-  "name": "template-vue3-jsx-antd-pinia",
+  "name": "@garron/template-vue3-jsx-pinia-antd",
   "version": "1.0.0",
+  "description": "基于 vite2 vue3 jsx pinia antd 项目模版",
   "scripts": {
     "serve": "npm run dev",
     "start": "vite",
@@ -11,10 +12,8 @@
     "lint:eslint": "eslint --cache --max-warnings 0 \"{src,mock}/**/*.{vue,ts,tsx}\" --fix",
     "lint:lint-staged": "lint-staged",
     "lint:prettier": "prettier --write  \"src/**/*.{js,json,tsx,css,less,scss,vue,html,md}\"",
-    "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\" --cache --cache-location node_modules/.cache/stylelint/",
-    "prepare": "husky install",
-    "test:gzip": "npx http-server dist --cors --gzip -c-1",
-    "test:br": "npx http-server dist --cors --brotli -c-1"
+    "lint:stylelint": "stylelint --cache --fix \"**/*.{vue,less,postcss,css,scss}\"",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.0.1",
