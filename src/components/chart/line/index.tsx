@@ -10,9 +10,8 @@ export type LineChartProps = Writeable<
 export const LineChart = defineComponent<LineChartProps>({
   name: 'LineChart',
   setup: (props, ctx) => {
-    console.log(props, ctx.attrs, 999);
     return () => <BaseChart chart={Line} {...ctx.attrs} {...props} />;
-  },
+  }
 });
 
 LineChart.install = (app: App) => {

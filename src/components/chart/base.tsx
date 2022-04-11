@@ -7,6 +7,8 @@ import {
   reactive,
   onBeforeUnmount,
   watch,
+  Ref,
+  ref
 } from 'vue';
 import { Plot as BasePlot } from '@antv/g2plot';
 import isEqual from 'lodash/isEqual';
@@ -27,20 +29,43 @@ type Data = Record<string, any>[] | Record<string, any>;
 export interface BaseChartProps<C extends Options> extends Pick<HTMLAttributes, PickedAttrs> {
   chart: any;
   data: Data;
+  chartRef?: Ref<BasePlot<C> | null>;
+  onReady?: (plot: BasePlot<C>) => void;
 }
-
+interface ComputedOptions<C extends Options> {
+  attrConfig: BaseChartProps<C>;
+  chartData: any[];
+  chartConfig: C;
+}
 export interface BaseChartRawBindings<C extends Options> {
   plot: BasePlot<C>;
 }
-const BaseChart = defineComponent<BaseChartProps<any>, BaseChartRawBindings<any>>({
+const BaseChart = defineComponent<
+  BaseChartProps<any>,
+  BaseChartRawBindings<any>,
+  ComputedOptions<any>
+>({
   name: 'BaseChart',
   inheritAttrs: false,
 
   setup(props, { attrs }) {
     const { proxy } = getCurrentInstance() as ComponentInternalInstance;
-    const attrConfig = reactive<BaseChartProps<any>>(attrs as any);
-    let plot = reactive<any>(null);
+    const attrConfig: any = reactive(attrs);
+    let plot: any = {};
 
+    onMounted(() => {
+      const chartRef = ref(attrConfig);
+      const { chart: Chart, onReady } = attrConfig;
+      plot = new Chart(proxy?.$el as HTMLElement, {
+        ...attrConfig
+      });
+      plot.render();
+      if (chartRef.value) {
+        chartRef.value = plot;
+      }
+      plot = plot;
+      onReady?.(plot);
+    });
     watch(
       () => attrConfig.data,
       (data: Data, oldData: Data) => {
@@ -48,7 +73,7 @@ const BaseChart = defineComponent<BaseChartProps<any>, BaseChartRawBindings<any>
           if (isEmpty(oldData)) {
             plot.update({
               ...attrConfig,
-              data: data,
+              data: data
             });
             plot.render();
           } else {
@@ -56,7 +81,7 @@ const BaseChart = defineComponent<BaseChartProps<any>, BaseChartRawBindings<any>
           }
         }
       },
-      { deep: true },
+      { deep: true }
     );
     watch(
       () => attrConfig,
@@ -64,22 +89,16 @@ const BaseChart = defineComponent<BaseChartProps<any>, BaseChartRawBindings<any>
         if (plot) {
           if (!isEqual(config, oldConfig)) {
             plot.update({
-              ...config,
+              ...config
             });
             plot.render();
           } else {
           }
         }
       },
-      { deep: true },
+      { deep: true }
     );
-    onMounted(() => {
-      const { chart: Chart } = attrConfig;
-      plot = new Chart(proxy?.$el as HTMLElement, {
-        ...attrConfig,
-      });
-      plot.render();
-    });
+
     onBeforeUnmount(() => {
       if (plot) {
         plot.destroy();
@@ -87,7 +106,7 @@ const BaseChart = defineComponent<BaseChartProps<any>, BaseChartRawBindings<any>
     });
 
     return () => <div class={attrConfig.class} style={attrConfig.style} />;
-  },
+  }
 });
 
 export default BaseChart;
